@@ -1,27 +1,23 @@
 Shooter shooter ;
 Zombie[] zombies ;
-ArrayList<Bullet> bullets;
+Bullet[] bullets;
 
 void setup(){
   background(255);
   size(1200, 600);
   shooter = new Shooter(width/2, height/2);
   zombies = new Zombie[10];
-  bullets = new ArrayList<Bullet>();
+  bullets = new Bullet[1000];
   for (int i = 0; i < zombies.length; i++){
     zombies[i] = new Zombie();
   }
 }
 
 void draw(){
-  Zombie[] zombieL, zombieR ;
   background(255);
   if (keyPressed == true){
     if (key == CODED){
-      shooter.move(keyCode);
-    }
-    if (key == ' '){
-      
+        shooter.move(keyCode);
     }
   }
   fill(255);
@@ -32,17 +28,20 @@ void draw(){
     zombies[i].kill(shooter.positionX, shooter.positionY);
   }
   shooter.shoot();   
-  if (shooter.shooted){
-    for (Bullet bullet : bullets){
-      bullet.move(); 
+  for (int i = 0; i < bullets.length; i++){
+    if (bullets[i] != null){
+      bullets[i].move();
     }
   }
-  for (Bullet bullet : bullets){
+  
+  for (int j = 0; j < bullets.length; j ++){
+    
     for (int i = 0; i < zombies.length; i ++){
-      if (dist(zombies[i].positionX, zombies[i].positionY, bullet.positionX, bullet.positionY) < 30){
-        zombieL = (Zombie[])subset(zombies, 0, i);
-        zombieR = (Zombie[])subset(zombies, i+1);
-        zombies = (Zombie[])concat(zombieL,zombieR);
+      if (bullets[j] != null){
+        if (dist(zombies[i].positionX, zombies[i].positionY, bullets[j].positionX, bullets[j].positionY) < 30){
+          zombies[i] = new Zombie();
+          
+        }
       }
     }
   }
@@ -50,16 +49,12 @@ void draw(){
  
 class Shooter{
   float positionX, positionY, size, speed;
-  int ammor ;
-  boolean shooted ;
   
   Shooter(float positionX, float positionY){
     this.positionX = positionX ;
     this.positionY = positionY ;
     this.size = 50 ;
     this.speed = 2 ;
-    this.ammor = 0 ;
-    this.shooted = false ;
     circle(this.positionX, this.positionY, 50);
   }
   
@@ -84,9 +79,10 @@ class Shooter{
   }
   
   void shoot(){
+
       if (keyPressed && key == ' '){
-        bullets.add(new Bullet(this.positionX, this.positionY));
-        this.shooted = true ;
+        bullets = (Bullet[])append(bullets, new Bullet(this.positionX, this.positionY));
+       
       }
   }
 } 
@@ -103,10 +99,10 @@ class Bullet{
   }
   
   void move(){
-    if (this.positionY > 0 ){
+    if (this.positionY >= 0 ){
       this.positionY -= this.speed ;
-    }     
-    circle(this.positionX, this.positionY, this.size);
+      circle(this.positionX, this.positionY, this.size);
+    } 
   }
   
 }
