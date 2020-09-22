@@ -14,6 +14,7 @@ void setup(){
 }
 
 void draw(){
+  Zombie[] zombieL, zombieR ;
   background(255);
   if (keyPressed == true){
     if (key == CODED){
@@ -39,7 +40,9 @@ void draw(){
   for (Bullet bullet : bullets){
     for (int i = 0; i < zombies.length; i ++){
       if (dist(zombies[i].positionX, zombies[i].positionY, bullet.positionX, bullet.positionY) < 30){
-        background(0);
+        zombieL = (Zombie[])subset(zombies, 0, i);
+        zombieR = (Zombie[])subset(zombies, i+1);
+        zombies = (Zombie[])concat(zombieL,zombieR);
       }
     }
   }
