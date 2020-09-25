@@ -1,6 +1,7 @@
 Shooter shooter ;
 Zombie[] zombies ;
 Bullet[] bullets;
+int killed = 0 ;
 
 void setup() {
   background(255);
@@ -11,10 +12,14 @@ void setup() {
   for (int i = 0; i < zombies.length; i++) {
     zombies[i] = new Zombie();
   }
+  textMode(CENTER);
+  textSize(50);
+  text(killed, 600, 50);
 }
 
 void draw() {
   background(255);
+  text(killed, 600, 50);
   if (keyPressed == true) {
     if (key == CODED) {
       shooter.move(keyCode);
@@ -47,6 +52,7 @@ void draw() {
         if (dist(zombies[i].positionX, zombies[i].positionY, bullets[j].positionX, bullets[j].positionY) < 30) {
           zombies[i] = new Zombie();
           bullets[j] = null;
+          killed += 1 ;
         }
       }
     }
@@ -88,10 +94,12 @@ class Shooter {
   }
 
   void shoot() {
-
     if (keyPressed && key == ' ') {
-      delay(0);
-      bullets = (Bullet[])append(bullets, new Bullet(this.positionX, this.positionY));
+      if (frameCount % 10 == 0){
+        bullets = (Bullet[])append(bullets, new Bullet(this.positionX, this.positionY));
+        println(frameCount);
+      }
+       println(frameCount);
     }
   }
 } 
@@ -119,7 +127,6 @@ class Bullet {
 
 class Zombie {
   float targetX, targetY, speed, positionX, positionY, size;
-
   Zombie() {
     this.targetX = positionX ;
     this.targetY = positionY ;
@@ -150,7 +157,14 @@ class Zombie {
   }
 
   void kill(float positionX, float positionY) {
-    if (dist(this.positionX, this.positionY, positionX, positionY) < 50) {
+    if (dist(this.positionX, this.positionY, positionX, positionY) < 50 ) {
+      println("YOU ARE LOSE!!");
+      delay(4000);
+      exit();
+    }
+    else if (killed == 10){
+      println("YOU ARE WIN!!!");
+      delay(4000);
       exit();
     }
   }
