@@ -27,6 +27,11 @@ void draw() {
   for (int i = 0; i < zombies.length; i++) {
     zombies[i].move(shooter.positionX, shooter.positionY);
     zombies[i].kill(shooter.positionX, shooter.positionY);
+    for (int j = i+1; j < zombies.length; j++){
+      if (dist(zombies[i].positionX, zombies[i].positionY, zombies[j].positionX, zombies[j].positionY) < zombies[i].size){
+        zombies[j].move(shooter.positionX, shooter.positionY);
+      }
+    }
   }
   shooter.shoot();   
   for (int i = 0; i < bullets.length; i++) {
