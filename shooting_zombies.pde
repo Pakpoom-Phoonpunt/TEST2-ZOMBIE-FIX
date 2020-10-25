@@ -44,19 +44,10 @@ void draw() {
       bullets[i].move();
     }
   }
-
-  for (int j = 0; j < bullets.length; j ++) {
-
-    for (int i = 0; i < zombies.length; i ++) {
-      if (bullets[j] != null) {
-        if (dist(zombies[i].positionX, zombies[i].positionY, bullets[j].positionX, bullets[j].positionY) < 30) {
-          zombies[i] = new Zombie();
-          bullets[j] = null;
-          killed += 1 ;
-        }
-      }
-    }
+  for (int k = 0 ; k < zombies.length ; k ++){
+    zombies[k].hited();
   }
+  
 } 
 
 class Shooter {
@@ -126,7 +117,7 @@ class Bullet {
 
 
 class Zombie {
-  float targetX, targetY, speed, positionX, positionY, size;
+  float targetX, targetY, speed, positionX, positionY, size, resize, livecount;
   Zombie() {
     this.targetX = positionX ;
     this.targetY = positionY ;
@@ -134,6 +125,8 @@ class Zombie {
     this.positionY = 0 ;
     this.speed = 0.5 ;
     this.size = 60 ;
+    this.resize = 1.2;
+    this.livecount = 0;
     circle(this.positionX, this.positionY, this.size);
   }
 
@@ -166,6 +159,29 @@ class Zombie {
       println("YOU ARE WIN!!!");
       delay(4000);
       exit();
+    }
+  }
+  void hited() {
+    for (int j = 0; j < bullets.length; j ++) {
+
+        if (bullets[j] != null) {
+
+          if (dist(this.positionX, this.positionY, bullets[j].positionX, bullets[j].positionY) < 30) {
+            bullets[j] = null;
+            this.size = this.size * this.resize;
+            this.livecount += 1;
+          }
+
+          if (this.livecount == 3) {
+            this.positionX = random(0, 1200);
+            this.positionY = 0;
+            this.size = 60;
+            this.livecount = 0;
+            bullets[j] = null;
+            killed += 1 ;
+          }
+        }
+      
     }
   }
 }
